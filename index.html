@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מדריכים לקלאוד התותח</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.7;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .main-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+
+        .main-header h1 {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+            font-weight: 700;
+        }
+
+        .main-header p {
+            font-size: 1.3rem;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .categories-nav {
+            background: white;
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin: -30px auto 40px;
+            max-width: 800px;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .categories-nav h3 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.4rem;
+        }
+
+        .category-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .category-tab {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .category-tab:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .category-tab.active {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        }
+
+        .guides-section {
+            margin: 40px 0;
+        }
+
+        .category-title {
+            color: white;
+            font-size: 2rem;
+            margin-bottom: 25px;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .guides-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+
+        .guide-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .guide-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .guide-header {
+            padding: 25px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .guide-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .guide-preview {
+            font-size: 1rem;
+            opacity: 0.9;
+            line-height: 1.5;
+        }
+
+        .guide-category {
+            background: rgba(255,255,255,0.2);
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 2000;
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 25px;
+            max-width: 900px;
+            margin: 30px auto;
+            position: relative;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 25px 25px 0 0;
+            text-align: center;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            left: 20px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            font-size: 1.8rem;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .modal-title {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .modal-body {
+            padding: 40px;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .guide-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .guide-content h2, .guide-content h3, .guide-content h4 {
+            color: #667eea;
+            margin: 25px 0 15px 0;
+            font-weight: 700;
+        }
+
+        .guide-content p {
+            margin: 15px 0;
+            line-height: 1.8;
+        }
+
+        .guide-content ul, .guide-content ol {
+            margin: 20px 0;
+            padding-right: 25px;
+        }
+
+        .guide-content li {
+            margin: 10px 0;
+            padding: 5px 0;
+        }
+
+        .guide-content strong {
+            color: #667eea;
+        }
+
+        .step-section {
+            background: linear-gradient(135deg, #e2f3ff 0%, #b8e0ff 100%);
+            border: 2px solid #b8e0ff;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 25px 0;
+            border-right: 5px solid #007bff;
+        }
+
+        .warning-section {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            border: 2px solid #ffeaa7;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            border-right: 5px solid #fdcb6e;
+        }
+
+        .info-section {
+            background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
+            border: 2px solid #bee5eb;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            border-right: 5px solid #17a2b8;
+        }
+
+        .success-section {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            border: 2px solid #c3e6cb;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            border-right: 5px solid #28a745;
+        }
+
+        .code-block {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .main-header h1 {
+                font-size: 2.5rem;
+            }
+            
+            .guides-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-content {
+                margin: 15px;
+            }
+            
+            .modal-body {
+                padding: 25px;
+            }
+
+            .category-tabs {
+                justify-content: center;
+                gap: 10px;
+            }
+
+            .category-tab {
+                padding: 10px 15px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-header">
+        <h1>🚀 מדריכים לקלאוד התותח</h1>
+        <p>המקום שלכם לכל הטיפים והטריקים הטכניים • <strong>14 מדריכים מעודכנים</strong></p>
+    </div>
+
+    <div class="container">
+        <div class="categories-nav">
+            <h3>🎯 בחרו קטגוריה:</h3>
+            <div class="category-tabs">
+                <button class="category-tab active" onclick="showCategory('all')">🌟 הכל</button>
+                <button class="category-tab" onclick="showCategory('android')">📱 אנדרואיד</button>
+                <button class="category-tab" onclick="showCategory('samsung')">🔷 סמסונג</button>
+                <button class="category-tab" onclick="showCategory('apps')">📲 אפליקציות</button>
+                <button class="category-tab" onclick="showCategory('ai')">🤖 בינה מלאכותית</button>
+                <button class="category-tab" onclick="showCategory('design')">🎨 עיצוב</button>
+            </div>
+        </div>
+
+        <!-- אנדרואיד -->
+        <div class="guides-section android-section">
+            <div class="category-title">📱 אנדרואיד</div>
+            <div class="guides-grid">
+                <div class="guide-card" onclick="showGuide1()">
+                    <div class="guide-header">
+                        <div class="guide-title">🧹 למה חשוב לנקות את המטמון אחרי עדכון מערכת?</div>
+                        <div class="guide-preview">מדריך מפורט לניקוי מטמון למכשירי סמסונג - מה זה מטמון, למה זה חשוב ואיך עושים את זה בצורה בטוחה</div>
+                        <div class="guide-category">📱 אנדרואיד</div>
+                    </div>
+                </div>
+
+                <div class="guide-card" onclick="showGuide2()">
+                    <div class="guide-header">
+                        <div class="guide-title">🔧 האפליקציה תקועה? יש פתרון פשוט!</div>
+                        <div class="guide-preview">איך לפתור בעיות של אפליקציות תקועות בעזרת ניקוי מטמון - הבדל בין מטמון למחיקת נתונים</div>
+                        <div class="guide-category">📱 אנדרואיד</div>
+                    </div>
+                </div>
+
+                <div class="guide-card" onclick="showGuide3()">
+                    <div class="guide-header">
+                        <div class="guide-title">🔄 למה כדאי להפעיל מחדש את הטלפון פעם בשבוע</div>
+                        <div class="guide-preview">מדוע הפעלה מחדש חשובה גם כשהטלפון עובד טוב - איך זה עוזר לביצועים ומתי לעשות את זה</div>
+                        <div class="guide-category">📱 אנדרואיד</div>
+                    </div>
+                </div>
+
+                <div class="guide-card" onclick="showGuide4()">
+                    <div class="guide-header">
+                        <div class="guide-title">📱 למה לא כדאי לסגור אפליקציות באנדרואיד כל הזמן</div>
+                        <div class="guide-preview">למה סגירת אפליקציות יכולה לפגוע בביצועים ובסוללה - איך אנדרואיד מנהלת זיכרון ומתי כן כדאי לסגור</div>
+                        <div class="guide-category">📱 אנדרואיד</div>
+                    </div>
+                </div>
+
+                <div class="guide-card" onclick="showGuide7()">
+                    <div class="guide-header">
+                        <div class="guide-title">📋 טאבלטים 2025</div>
+                        <div class="guide-preview">טבלה מעודכנת לשנת 2025 עם השוואה בין דגמי הטאבלטים הטובים ביותר</div>
+                        <div class="guide-category">📱 אנדרואיד</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- סמסונג -->
+        <div class="guides-section samsung-section">
+            <div class="category-title">🔷 מכשירי סמסונג</div>
+            <div class="guides-grid">
+                <div class="guide-card" onclick="showGuide8()">
+                    <div class="guide-header">
+                        <div class="guide-title">🔋 דרך לחסוך בסוללה משמעותית בלחיצת כפתור</div>
+                        <div class="guide-preview">יצירת שגרה אוטומטית לחיסכון בסוללה - כיבוי WiFi, הנמכת רזולוציה, מצב חיסכון ועוד</div>
+                        <div class="guide-category">🔷 סמסונג</div>
+                    </div>
+                </div>
+
+                <div class="guide-card" onclick="showGuide9()">
+                    <div class="guide-header">
+                        <div class="guide-title">🔒 איך לנעול ולהסתיר אלבום או תמונה מסוימים בגלריה</div>
+                        <div class="guide-preview">הגנה על תמונות פרטיות בגלריה עם תיקייה מאובטחת של סמסונג</div>
+                        <div class="guide-category">🔷 סמסונג</div>
+                    </div>
+                </div>
+
+                <div class="guide-card" onclick="showGuide10()">
+                    <div class="guide-header">
+                        <div class="guide-title">📌 איך להצמיד חלק מהמסך למעלה בזמן מעבר לאפליקציה אחרת</div>
+                        <div class="guide-preview">שימוש בחלוניות Edge להצמדת תוכן למעבר נוח בין אפליקציות - עם ובלי AI</div>
+                        <div class="guide-category">🔷 סמסונג</div>
+                    </div>
+                </div>
+
+                <div class="guide-card" onclick="showGuide6()">
+                    <div class="guide-header">
+                        <div class="guide-title">📞 מדריך להגדרת רקע וידאו בזמן חיוג שיחה עם אפליקציית Zedga</div>
+                        <div class="guide-preview">איך להגדיר רקע וידאו יפה בזמן שיחות עם אפליקציית Zedga - מדריך שלב אחר שלב</div>
+                        <div class="guide-category">🔷 סמסונג</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- אפליקציות -->
+        <div class="guides-section apps-section">
+            <div class="category-title">📲 אפליקציות</div>
+            <div class="guides-grid">
+                <div class="guide-card" onclick="showGuide5()">
+                    <div class="guide-header">
+                        <div class="guide-title">📱 וואטסאפ חסמה לכם את החשבון?</div>
+                        <div class="guide-preview">מדריך מלא להחזרת חשבון וואטסאפ חסום - למה זה קורה, איך מחזירים ואיך להימנע מזה בעתיד</div>
+                        <div class="guide-category">📲 אפליקציות</div>
+                    </div>
+                </div>
+
+                <div class="guide-card" onclick="showGuide11()">
+                    <div class="guide-header">
+                        <div class="guide-title">🎨 בעידן שבו כולם שולחים מדבקות בוואטסאפ</div>
+                        <div class="guide-preview">איך ליצור מדבקות מותאמות אישית לוואטסאפ עם ChatGPT - מדריך מלא מתכנון ועד הוספה</div>
+                        <div class="guide-category">📲 אפליקציות</div>
+                    </div>
+                </div>
+
+                <div class="guide-card" onclick="showGuide12()">
+                    <div class="guide-header">
+                        <div class="guide-title">🚨 הכירו את האפליקציה מגן ישראל</div>
+                        <div class="guide-preview">מדריך מלא לאפליקציית מגן ישראל - מפת מקלטים, חדשות, AI לבדיקת ממ"ד, מעקב טיסות ועוד</div>
+                        <div class="guide-category">📲 אפליקציות</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- בינה מלאכותית -->
+        <div class="guides-section ai-section">
+            <div class="category-title">🤖 בינה מלאכותית</div>
+            <div class="guides-grid">
+                <div class="guide-card" onclick="showGuide13()">
+                    <div class="guide-header">
+                        <div class="guide-title">🤖 איזה כלי AI הכי שווה?</div>
+                        <div class="guide-preview">השוואה חכמה: במקום לשלם על כל כלי בנפרד - פתרון אחד שמרכז הכל ב-10$ לחודש</div>
+                        <div class="guide-category">🤖 בינה מלאכותית</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- עיצוב -->
+        <div class="guides-section design-section">
+            <div class="category-title">🎨 עיצוב ומשאבים</div>
+            <div class="guides-grid">
+                <div class="guide-card" onclick="showGuide14()">
+                    <div class="guide-header">
+                        <div class="guide-title">🎨 אוסף של 6000 אייקוני תלת-מימד</div>
+                        <div class="guide-preview">מאגר ענק של אייקונים תלת-מימדיים בחינם למעצבים - כולל מחולל מותאם אישית</div>
+                        <div class="guide-category">🎨 עיצוב</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" id="guideModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+                <h2 class="modal-title" id="modalTitle"></h2>
+            </div>
+            <div class="modal-body">
+                <div class="guide-content" id="modalContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function closeModal() {
+            document.getElementById('guideModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        function showModal(title, content) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalContent').innerHTML = content;
+            document.getElementById('guideModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function showCategory(category) {
+            // עדכון כפתורים
+            document.querySelectorAll('.category-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // הצגת קטגוריות
+            const sections = document.querySelectorAll('.guides-section');
+            if (category === 'all') {
+                sections.forEach(section => section.style.display = 'block');
+            } else {
+                sections.forEach(section => {
+                    if (section.classList.contains(category + '-section')) {
+                        section.style.display = 'block';
+                    } else {
+                        section.style.display = 'none';
+                    }
+                });
+            }
+        }
+
+        // המדריכים הקיימים
+        function showGuide1() {
+            showModal('🧹 למה חשוב לנקות את המטמון אחרי עדכון מערכת?', `
+                <h2>📁 מה זה בכלל קבצי מטמון?</h2>
+                <p>קבצי מטמון (Cache) הם כמו <strong>"פתקים זמניים"</strong> שהמכשיר שלכם שומר כדי לעבוד מהר יותר.</p>
+                <p>כשאתם גולשים באינטרנט או משתמשים באפליקציות, המכשיר שומר מידע במטמון כדי שבפעם הבאה הוא יוכל לטעון את האפליקציה או האתר מהר יותר.</p>
+                
+                <div class="warning-section">
+                    <h3>⚠️ אבל יש בעיה:</h3>
+                    <p>עם הזמן, במיוחד אחרי עדכוני תוכנה, הפתקים האלה הופכים ל"זבל" ותופסים מקום סתם. הם כבר לא עוזרים אלא רק מאטים את המכשיר.</p>
+                </div>
+
+                <h2>🤔 למה חשוב לנקות את המטמון אחרי עדכון מערכת?</h2>
+                <ul>
+                    <li><strong>כי יש התנגשות בין ישן לחדש</strong> - קבצי המטמון הישנים מבלבלים את המערכת החדשה.</li>
+                    <li><strong>כי זה נותן למכשיר "אוויר לנשום"</strong> - כשאתם מנקים את המטמון, אתם מפנים מקום למערכת לעבוד בו.</li>
+                </ul>
+
+                <div class="success-section">
+                    <h3>✨ הנה מה שתרגישו אחרי ניקוי מטמון:</h3>
+                    <ul>
+                        <li>🚀 האפליקציות נפתחות יותר מהר</li>
+                        <li>🪶 המעבר בין מסכים חלק יותר</li>
+                        <li>❄️ פחות "תקיעות" ו"קפיאות"</li>
+                        <li>🔋 הסוללה מחזיקה יותר זמן</li>
+                    </ul>
+                </div>
+
+                <h2>📖 מדריך פשוט לניקוי מטמון</h2>
+                
+                <div class="warning-section">
+                    <h3>⚡ כמה דברים חשובים לפני שמתחילים:</h3>
+                    <ul>
+                        <li>🔋 דאגו שהסוללה תהיה טעונה לפחות 40%</li>
+                        <li>💾 למרות שזה בטוח, מומלץ לגבות את המכשיר ליתר ביטחון</li>
+                        <li>⚠️ אל תכבו את המכשיר באמצע התהליך</li>
+                    </ul>
+                </div>
+
+                <div class="info-section">
+                    <p><strong>שימו לב:</strong> ניקוי מטמון לא מוחק תמונות, סרטונים או הודעות שלכם. זה בטוח לגמרי!</p>
+                </div>
+
+                <h2>🎯 אז בואו נתחיל!</h2>
+
+                <div class="step-section">
+                    <h3>שלב 1: כיבוי המכשיר 📱</h3>
+                    <ul>
+                        <li>📴 כבו את המכשיר</li>
+                        <li>⏰ חכו 10-15 שניות אחרי שהמסך נכבה</li>
+                    </ul>
+                </div>
+
+                <div class="step-section">
+                    <h3>שלב 2: כניסה לתפריט המיוחד (Recovery Mode) 🔧</h3>
+                    <ul>
+                        <li>🔌 חברו את המכשיר למחשב באמצעות כבל USB</li>
+                        <li>⏳ המתינו שחיווי הטעינה על המסך ייעלם</li>
+                    </ul>
+                    
+                    <p><strong>לחצו בו זמנית על:</strong></p>
+                    <div class="code-block">
+                        🔊 כפתור הגברת הקול (Volume Up)<br>
+                        ⚡ כפתור ההפעלה (Power)<br>
+                        🤖 במכשירים עם כפתור Bixby - גם עליו
+                    </div>
+
+                    <div class="warning-section">
+                        <p><strong>כשתראו את הלוגו של סמסונג:</strong></p>
+                        <ul>
+                            <li>🔓 שחררו רק את כפתור ההפעלה — אבל המשיכו להחזיק את כפתור הווליום</li>
+                            <li>📺 תוך כמה שניות יופיע מסך כחול או שחור עם כיתוב קטן</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="step-section">
+                    <h3>שלב 3: ניווט בתפריט 🧭</h3>
+                    <div class="warning-section">
+                        <p><strong>שימו לב, במסך הזה:</strong></p>
+                        <ul>
+                            <li>🚫 המסך לא מגיב למגע</li>
+                            <li>🔊 השתמשו בכפתורי הווליום (למעלה/למטה) כדי לנוע בין האפשרויות</li>
+                            <li>⚡ השתמשו בכפתור ההפעלה כדי לבחור</li>
+                        </ul>
+                    </div>
+
+                    <p>נווטו עד שתגיעו לאפשרות <strong>"Wipe cache partition"</strong></p>
+
+                    <div class="warning-section">
+                        <p><strong>⚠️ שימו לב:</strong> אל תבחרו ב-"Wipe data" - זה ימחק את כל המידע שלכם!</p>
+                    </div>
+                </div>
+
+                <div class="step-section">
+                    <h3>שלב 4: הפעלת המכשיר מחדש 🔄</h3>
+                    <p>במסך הראשי של התפריט:</p>
+                    <ul>
+                        <li>🔊 נווטו ל-"Reboot system now"</li>
+                        <li>⚡ לחצו על כפתור ההפעלה</li>
+                    </ul>
+                    <div style="text-align: center; margin: 30px 0; font-size: 1.5rem;">
+                        <strong>🎉 וזהו - המכשיר שלכם נקי!</strong>
+                    </div>
+                </div>
+            `);
+        }
+
+        function showGuide2() {
+            showModal('🔧 האפליקציה תקועה? יש פתרון פשוט!', `
+                <p>רבים מאיתנו נתקלים מדי פעם באפליקציה שמתחילה לזייף: נתקעת, לא נטענת כראוי או פשוט מתנהגת מוזר.</p>
+                <p>לפני שממהרים להסיר ולהתקין מחדש - יש פעולה פשוטה אחת שיכולה לעזור: <strong>ניקוי המטמון</strong>.</p>
+
+                <div class="info-section">
+                    <h3>🤔 מה זה בכלל "מטמון"?</h3>
+                    <p>המטמון (Cache) הוא זיכרון זמני שבו האפליקציה שומרת מידע כמו תמונות, הגדרות שכבר נטענו, או קבצים שכבר הורדו – כדי לפעול מהר יותר בעתיד.</p>
+                    <p>למשל, אפליקציית אינסטגרם שומרת תמונות שראיתם לאחרונה כדי לטעון אותן שוב בלי להוריד מחדש.</p>
+                </div>
+
+                <div class="success-section">
+                    <h3>🧹 למה לנקות מטמון?</h3>
+                    <ul>
+                        <li><strong>שחרור מקום</strong> - לפעמים המטמון תופס מאות מגה־בייט ואף ג'יגות</li>
+                        <li><strong>תיקון תקלות</strong> - מטמון תקול או ישן עלול לגרום לקריסות</li>
+                        <li><strong>האצת ביצועים</strong> - ניקוי מדי פעם מרענן את פעילות האפליקציה</li>
+                    </ul>
+                </div>
+
+                <div class="warning-section">
+                    <h3>⚠️ מה ההבדל ממחיקת נתונים?</h3>
+                    <p><strong>ניקוי מטמון</strong> מוחק רק קבצים זמניים - לא מוחק את המשתמש, ההגדרות או ההתחברות.</p>
+                    <p><strong>מחיקת נתונים</strong> מאפסת את האפליקציה לגמרי - כולל מחיקת הגדרות, כניסות והעדפות.</p>
+                </div>
+
+                <div class="step-section">
+                    <h3>📱 אז איך מנקים מטמון?</h3>
+                    <ul>
+                        <li>כנסו להגדרות</li>
+                        <li>גללו ל-"יישומים" > בחרו את האפליקציה הרצויה</li>
+                        <li>לחצו על "אחסון" > ואז על "נקה מטמון"</li>
+                    </ul>
+                </div>
+
+                <div class="success-section">
+                    <h3>💡 לסיכום:</h3>
+                    <p>ניקוי המטמון הוא כמו "רענון" קטן לאפליקציות.</p>
+                    <p>כאשר מתעוררות תקלות כמו איטיות, קריסה או בעיה בטעינה של תוכן באפליקציה - ייתכן מאוד שניקוי מטמון יפתור את הבעיה.</p>
+                </div>
+            `);
+        }
+
+        function showGuide3() {
+            showModal('🔄 למה כדאי להפעיל מחדש את הטלפון פעם בשבוע', `
+                <p>למה כדאי להפעיל מחדש את הטלפון פעם בשבוע - גם אם הוא עובד מצוין?</p>
+                <p>אנחנו רגילים לחשוב שטלפונים חכמים "מנהלים את עצמם" - ואם הכל עובד חלק, אין סיבה לגעת. אבל בדיוק כמו מחשב, גם לטלפון יש מערכת הפעלה שצוברת עומסים, זיכרון, תקלות זמניות - ולפעמים פשוט צריך "רענון".</p>
+
+                <div class="info-section">
+                    <h3>🤔 מתי זה הכי מורגש?</h3>
+                    <ul>
+                        <li>כשאפליקציות מתחילות לקרוס</li>
+                        <li>כשיש תקיעות בגלילה</li>
+                        <li>כשיש בעיות קליטה או שמע</li>
+                        <li>ובעיקר - כשלא כיביתם את המכשיר שבועיים ויותר</li>
+                    </ul>
+                </div>
+
+                <div class="success-section">
+                    <h3>⚡ מה בעצם קורה כשמפעילים מחדש?</h3>
+                    <ul>
+                        <li>כל תהליכי הרקע נסגרים לחלוטין ומופעלים מחדש</li>
+                        <li>זיכרון RAM מתנקה לגמרי</li>
+                        <li>באגים קטנים ומצבים "תקועים" של אפליקציות - נעלמים</li>
+                        <li>קבצים זמניים נמחקים</li>
+                        <li>קישוריות לרשת, Wi-Fi ו-Bluetooth מאותחלות</li>
+                    </ul>
+                </div>
+
+                <div class="step-section">
+                    <h3>📅 כל כמה זמן כדאי לעשות את זה?</h3>
+                    <p>אחת לשבוע, גג שבועיים</p>
+                </div>
+
+                <div class="success-section">
+                    <h3>💡 לסיכום:</h3>
+                    <p>הפעלה מחדש לא מוחקת כלום, לא פוגעת - רק מנקה ומרעננת.</p>
+                    <p>לוקח דקה - ויכול לפתור תקלות עוד לפני שהן מתחילות.</p>
+                </div>
+            `);
+        }
+
+        function showGuide4() {
+            showModal('📱 למה לא כדאי לסגור אפליקציות באנדרואיד כל הזמן', `
+                <p>אחד ההרגלים הכי נפוצים אצל משתמשי אנדרואיד הוא לסגור אפליקציות ברקע בכל הזדמנות. חלק עושים את זה מתוך מחשבה שזה חוסך סוללה או משפר ביצועים - אבל מה באמת קורה מאחורי הקלעים?</p>
+
+                <div class="success-section">
+                    <h3>🤖 אנדרואיד כבר יודעת לעשות את העבודה!</h3>
+                    <ul>
+                        <li><strong>🌙 Doze Mode</strong> - מעביר אפליקציות שלא בשימוש למצב שינה עמוקה</li>
+                        <li><strong>🔋 מיטוב סוללה</strong> - מגביל אוטומטית פעילות רקע של אפליקציות לא פעילות</li>
+                        <li><strong>🧠 ניהול זיכרון חכם</strong> - משאיר בזיכרון אפליקציות שייתכן ותשתמשו בהן שוב</li>
+                    </ul>
+                </div>
+
+                <div class="warning-section">
+                    <h3>❌ אז מה הבעיה בעצם בסגירת אפליקציות ידנית?</h3>
+                    <ul>
+                        <li><strong>🔄 טעינה מחדש צורכת יותר סוללה</strong> - כשאתם סוגרים אפליקציה ואז פותחים אותה מחדש, היא נטענת שוב לזיכרון</li>
+                        <li><strong>📱 פגיעה בפעילות רקע חשובה</strong> - וואטסאפ, גיבוי לענן, מוזיקה או ניווט עלולים להיפגע מסגירה ידנית</li>
+                    </ul>
+                </div>
+
+                <div class="info-section">
+                    <h3>⚡ מה לגבי כפתור "בצע מיטוב כעת"?</h3>
+                    <p>כשנכנסים ל"תחזוקת המכשיר" ולוחצים על "בצע מיטוב כעת", זה שונה לגמרי מסגירה ידנית!</p>
+                    <p><strong>הפעולה הזו מבצעת מיטוב חכם:</strong></p>
+                    <ul>
+                        <li>✅ מעבירה תהליכים לא נחוצים למצב שינה</li>
+                        <li>✅ מפנה משאבים ומאזנת את הפעילות</li>
+                        <li>✅ לא פוגעת באפליקציות חשובות (ניווט, שיחות, הורדות)</li>
+                    </ul>
+                </div>
+
+                <div class="step-section">
+                    <h3>🛠️ מתי כן כדאי לסגור אפליקציה?</h3>
+                    <ul>
+                        <li>כשהיא תקועה או קופאת</li>
+                        <li>כשאתם מזהים צריכת סוללה לא רגילה</li>
+                        <li>אם יש באג או בעיה בתפקוד</li>
+                    </ul>
+                </div>
+
+                <div class="success-section">
+                    <h3>💡 לסיכום:</h3>
+                    <p>אל תסגרו אפליקציות סתם כהרגל - תנו למערכת לנהל את זה!</p>
+                    <p>אבל כן כדאי להיעזר במנגנוני מיטוב סוללה - ולסגור ידנית רק כשיש סיבה טובה.</p>
+                </div>
+            `);
+        }
+
+        function showGuide5() {
+            showModal('📱 וואטסאפ חסמה לכם את החשבון?', `
+                <p><strong>וואטסאפ חסמה לכם את החשבון?</strong><br>
+                כך תחזירו אותו לפעילות! 👇</p>
+
+                <div class="warning-section">
+                    <h3>⚠️ מה קורה בתקופה האחרונה?</h3>
+                    <p>בזמן האחרון יותר ויותר אנשים מגלים שחשבון הוואטסאפ שלהם נחסם לפתע.</p>
+                    <p>החברה לא תמיד מסבירה למה זה קרה, רק כותבת הודעות כמו:</p>
+                    <ul>
+                        <li>📵 "לא ניתן להשתמש בחשבון הזה יותר"</li>
+                        <li>🚫 "זיהינו פעילות שמפרה את התנאים"</li>
+                    </ul>
+                    <p>למרות שהחברה אומרת שלא שינו כלום בחוקים, הרבה משתמשים חווים את הבעיה הזו.</p>
+                </div>
+
+                <div class="info-section">
+                    <h3>❓ למה החשבון נחסם בכלל?</h3>
+                    <ul>
+                        <li><strong>🔹 שליחת ספאם</strong> - יותר מדי הודעות באותו זמן</li>
+                        <li><strong>🔹 שימוש באפליקציות מזויפות</strong> - כמו וואטסאפ פלוס או GB WhatsApp</li>
+                        <li><strong>🔹 תוכן לא הולם</strong> - הודעות פוגעניות או בלתי חוקיות</li>
+                        <li><strong>🔹 דיווחים של משתמשים אחרים</strong> - אם מישהו דיווח עליכם</li>
+                        <li><strong>🔹 פעילות חשודה</strong> - שימוש באותו חשבון על כמה טלפונים</li>
+                    </ul>
+                </div>
+
+                <div class="step-section">
+                    <h3>🛠️ איך מחזירים את החשבון?</h3>
+                    
+                    <h4><strong>שלב 1️⃣: בדקו איזה סוג חסימה יש לכם</strong></h4>
+                    <ul>
+                        <li><strong>⏰ חסימה זמנית</strong> - יש טיימר שמראה מתי זה יגמר (24-48 שעות)</li>
+                        <li><strong>💀 חסימה קבועה</strong> - אין טיימר, החשבון "מת"</li>
+                    </ul>
+
+                    <h4><strong>שלב 2️⃣: אם החסימה זמנית</strong></h4>
+                    <ul>
+                        <li>⏳ פשוט חכו עד שהזמן יגמר</li>
+                        <li>❌ אל תנסו להיכנס כל הזמן - זה רק יחמיר את המצב</li>
+                    </ul>
+
+                    <h4><strong>שלב 3️⃣: אם השתמשתם באפליקציה מזויפת</strong></h4>
+                    <ol>
+                        <li>🗑️ מחקו את האפליקציה המזויפת מיד</li>
+                        <li>⬇️ הורידו את הוואטסאפ הרשמי מהחנות</li>
+                        <li>🔄 התקינו ונסו להתחבר שוב</li>
+                    </ol>
+
+                    <h4><strong>שלב 4️⃣: הגישו ערעור</strong></h4>
+                    <ol>
+                        <li>📱 פתחו את וואטסאפ</li>
+                        <li>👆 תלחצו על "בקש סקירה" (Request a Review)</li>
+                        <li>✍️ כתבו הסבר קצר ומנומס על מה קרה</li>
+                        <li>📤 שלחו וחכו כמה ימים לתשובה</li>
+                    </ol>
+
+                    <h4><strong>שלב 5️⃣: פנו ישירות לתמיכה</strong></h4>
+                    <p>אם שום דבר לא עוזר, שלחו מייל ל: <strong>support@whatsapp.com</strong></p>
+                </div>
+
+                <div class="info-section">
+                    <h3>💌 מה לכתוב במייל:</h3>
+                    <ul>
+                        <li>מספר הטלפון שלכם (עם קידומת +972)</li>
+                        <li>הסבר קצר מה קרה</li>
+                        <li>ציינו שאתם משתמשים באפליקציה הרשמית</li>
+                        <li>היו מנומסים ולא תוקפניים</li>
+                    </ul>
+                </div>
+
+                <div class="success-section">
+                    <h3>🛡️ טיפים נוספים להימנע מחסימה:</h3>
+                    <ul>
+                        <li>אל תוסיפו הרבה אנשים לקבוצות בלי שהם מסכימים</li>
+                        <li>אל תעבירו הודעות שרשרת</li>
+                        <li>כבדו את המשתמשים האחרים</li>
+                    </ul>
+                </div>
+
+                <div class="success-section">
+                    <h3>✅ לסיכום</h3>
+                    <p>חסימת חשבון וואטסאפ זה לא סוף העולם. ברוב המקרים אפשר לפתור את זה אם פועלים נכון.</p>
+                    <p><strong>🎯 הכי חשוב:</strong> תהיו סבלניים ומנומסים. התמיכה של וואטסאפ מגיבה יותר טוב למי שלא צועק או מתלונן.</p>
+                </div>
+            `);
+        }
+
+        function showGuide6() {
+            showModal('📞 מדריך להגדרת רקע וידאו בזמן חיוג שיחה עם אפליקציית Zedga', `
+                <div class="step-section">
+                    <h3>שלב ראשון: הורדת הוידאו הרצוי</h3>
+                    <ol>
+                        <li>התקינו את אפליקציית Zedge.</li>
+                        <li>כנסו לאפליקציה ולחצו על הלשונית "Wallpapers".</li>
+                        <li>בחרו באפשרות "Video Wallpapers" מהתפריט העליון.</li>
+                        <li>עיינו ברקעי הוידאו הזמינים ובחרו באחד המועדף עליכם.</li>
+                        <li>לחצו על כפתור ההורדה - באופן אוטומטי תופיע בקשה לצפייה בפרסומת.</li>
+                    </ol>
+                    <div class="warning-section">
+                        <p><strong>וודאו מראש שיש לכם גיבוי של הרקע הנוכחי.</strong> כשהפרסומת תסתיים, לחצו על "set video wallpaper" ובחרו באפשרות "Home screen only" (מסך בית בלבד).</p>
+                        <p>לסיום, הקישו על "הגדרת טפט" בעברית.</p>
+                    </div>
+                </div>
+
+                <div class="step-section">
+                    <h3>שלב שני: העברת הקובץ למיקום נגיש</h3>
+                    <p>עכשיו צריך להעביר את קובץ הוידאו שהתקבל למיקום שאליו תוכלו לגשת בזמן הגדרת רקע השיחה.</p>
+                    <ol>
+                        <li>השתמשו במנהל קבצים הנותן גישה לתיקיית data (כמו Cx File Explorer).</li>
+                        <li><strong>טיפ מהיר:</strong> חפשו "Zedge" כדי להגיע ישירות לתיקייה הרלוונטית.</li>
+                        <li>העתיקו את קובץ הוידאו מהתיקייה.</li>
+                        <li>צרו תיקייה חדשה בשם "Zedge" ישירות באחסון הפנימי (לא בתת-תיקייה).</li>
+                        <li>הדביקו את קובץ הוידאו בתיקיית Zedge החדשה שיצרתם באחסון הפנימי.</li>
+                    </ol>
+                </div>
+
+                <div class="step-section">
+                    <h3>שלב שלישי: הפעלת הרקע בחייגן</h3>
+                    <p>פתחו את אפליקציית החייגן:</p>
+                    <ul>
+                        <li>לחצו על תפריט שלוש הנקודות בפינה השמאלית העליונה</li>
+                        <li>בחרו ב"הגדרות"</li>
+                        <li>עברו ל"רקע שיחה"</li>
+                        <li>לחצו על "רקע"</li>
+                        <li>גללו מטה עד שתגיעו ל"גלריה"</li>
+                        <li>בחרו בתיקיית "Zedge" שיצרתם</li>
+                        <li>בחרו את רקע הוידאו הרצוי</li>
+                        <li>אשרו את הבחירה</li>
+                    </ul>
+                </div>
+
+                <div class="success-section">
+                    <h3>🎉 זהו!</h3>
+                    <p>עכשיו כל פעם שתתקשרו או שמישהו יתקשר אליכם - בזמן החיוג יופיע הוידאו שבחרתם! תהנו 🙂</p>
+                    <p><em>#קרדיט לאייזיק התותח</em></p>
+                </div>
+            `);
+        }
+
+        function showGuide7() {
+            showModal('📋 טאבלטים 2025', `
+                <div class="info-section">
+                    <h3>מחפשים טאבלט?</h3>
+                    <p>הכנתי לכם טבלה שמשווה בין דגמי הפרימיום הבולטים, מעודכן ליוני 2025</p>
+                    <div style="text-align: center; margin: 20px 0;">
+                        <a href="https://amirbiron.github.io/Tablets2025" target="_blank" style="background: #667eea; color: white; padding: 15px 30px; text-decoration: none; border-radius: 25px; font-weight: bold; display: inline-block;">
+                            🔗 צפייה בטבלת השוואת טאבלטים
+                        </a>
+                    </div>
+                    <p style="text-align: center;">תהנו 🙂</p>
+                </div>
+            `);
+        }
+
+        // המדריכים החדשים
+        function showGuide8() {
+            showModal('🔋 דרך לחסוך בסוללה משמעותית בלחיצת כפתור', `
+                <p>דרך לחסוך בסוללה משמעותית בלחיצת כפתור, בזמן שאתם בחוץ ולחוצים על האחוזים.</p>
+                <p>יצירת <strong>"שגרה"</strong> שתכבה את ה-Wifi, תנמיך את רזולוציית המסך, תנמיך את קצב ריענון המסך, ותגדיר את 'פרופיל ביצועים' ל-"קל", ואם תרצו גם תפעיל 'מצב לילה'.</p>
+
+                <div class="step-section">
+                    <h3>מתחילים:</h3>
+                    <p>כנסו להגדרות > מצבים ושגרות > בחרו למטה ב-'שגרות' > לחצו למעלה על ה-'+' > לחצו למעלה על ה-'+' העליון > בחרו 'הפעל באופן ידני'.</p>
+                </div>
+
+                <div class="step-section">
+                    <h3>הוספת פעולות:</h3>
+                    <ul>
+                        <li>• עכשיו לחצו על ה-'+' התחתון > 'חיבורים' > 'Wifi' > 'כבוי' > 'בוצע'.</li>
+                        <li>• לחצו על 'הוסף פעולה' > 'תצוגה' > 'תנועה חלקה' > 'רגיל' > 'בוצע'.</li>
+                        <li>• לחצו על 'הוסף פעולה' > 'תצוגה' > 'רזולוציית מסך' > '+HD' > 'בוצע'.</li>
+                        <li>לחצו על 'הוסף פעולה' > רשמו למעלה בחיפוש 'פרופיל ביצועים' > 'קל' > 'בוצע'.</li>
+                        <li>• לחצו על 'הוסף פעולה' > 'חיבורים' > 'מצב רשת' > LTE מועדף.</li>
+                        <li>• (אופציונלי) הוסף פעולה > תצוגה > מצב חשוך > מופעל > בוצע</li>
+                    </ul>
+                    <p>עכשיו לחצו על <strong>"שמור"</strong>!</p>
+                </div>
+
+                <div class="info-section">
+                    <p>עכשיו בחרו אייקון, צבע, ושם לשגרה - לפי טעמכם.</p>
+                </div>
+
+                <div class="step-section">
+                    <h3>יצירת הווידג'ט:</h3>
+                    <p>עכשיו הכי חשוב - להפוך את זה לכפתור נגיש במסך הבית!</p>
+                    <p>לחצו על השגרה שיצרתם > לחצו על ה-3 נקודות למטה > בחרו ב-'הגדר כיישומון' > 'הוסף'.</p>
+                </div>
+
+                <div class="success-section">
+                    <h3>🎉 סיימתם!</h3>
+                    <p>וזהו - יש לכם ווידג'ט מוכן לזמן שאתם רוצים לחסוך בסוללה, בלחיצת כפתור יחולו כל ההגדרות החדשות, ואין ספק שהסוללה תחזיק מעמד הרבה יותר זמן.</p>
+                </div>
+            `);
+        }
+
+        function showGuide9() {
+            showModal('🔒 איך לנעול ולהסתיר אלבום או תמונה מסוימים בגלריה', `
+                <div class="step-section">
+                    <h3>הגדרת תיקייה מאובטחת:</h3>
+                    <ol>
+                        <li>כנסו להגדרות > אבטחה ופרטיות > הגדרות אבטחה נוספות > תיקייה מאובטחת</li>
+                        <li>לחצו על "המשך" ושוב על "המשך"</li>
+                        <li>עכשיו בחרו סוג נעילה והגדירו אותה</li>
+                    </ol>
+                    <p><strong>זהו, יצרנו תיקייה מאובטחת!</strong></p>
+                </div>
+
+                <div class="step-section">
+                    <h3>העברת תמונות לתיקייה המאובטחת:</h3>
+                    <ol start="4">
+                        <li>עכשיו כנסו לגלריה, בחרו תמונה או תיקייה שברצונכם לנעול</li>
+                        <li>לחצו על סמל 3 הנקודות</li>
+                        <li>בתפריט שנפתח בחרו "העבר אל תיקייה מאובטחת"</li>
+                    </ol>
+                </div>
+
+                <div class="success-section">
+                    <h3>✅ התוצאה:</h3>
+                    <p>עכשיו כל מה שתעבירו לתיקייה המאובטחת - יופיע רק בתוך הגלריה שבתיקייה המאובטחת.</p>
+                    <p><strong>לא ניתן לגשת אליה בלי טביעת אצבע / סיסמה נפרדת.</strong></p>
+                </div>
+            `);
+        }
+
+        function showGuide10() {
+            showModal('📌 איך להצמיד חלק מהמסך למעלה בזמן מעבר לאפליקציה אחרת', `
+                <p>(למשל כדי להעתיק טקסט מסוים מהמסך הנוכחי לאפליקציה אחרת)</p>
+
+                <div class="step-section">
+                    <h3>במכשירים עם AI:</h3>
+                    <ol>
+                        <li>פתחו את חלונית ה-Edge</li>
+                        <li>בחרו ב"בחירה באמצעות AI"</li>
+                        <li>סמנו את הקטע שאתם רוצים להצמיד</li>
+                        <li>לחצו על האייקון של הנעיצה 📌</li>
+                    </ol>
+                </div>
+
+                <div class="step-section">
+                    <h3>במכשירים שלא תומכים ב-AI:</h3>
+                    <p>הגדרות ⚙️ ← תצוגה ← חלוניות Edge ← חלוניות ← "בחירה חכמה"</p>
+                    <p>עכשיו כשתפתחו את ה-Edge תהיה לכם אפשרות של "הצמד/הוסף"</p>
+                </div>
+
+                <div class="info-section">
+                    <h3>💡 לסיכום:</h3>
+                    <p>תכונה מעולה להעתקת טקסט, מספרים או מידע מאפליקציה אחת לאחרת בצורה נוחה!</p>
+                </div>
+            `);
+        }
+
+        function showGuide11() {
+            showModal('🎨 בעידן שבו כולם שולחים מדבקות בוואטסאפ', `
+                <p>בעידן שבו כולם שולחים מדבקות בוואטסאפ,<br>
+                הגיע הזמן שגם אתם תיצרו לעצמכם מדבקה מקורית שתגרום לחברים להתלהב!</p>
+
+                <div class="step-section">
+                    <h3>שלב א' - תכנון המדבקה</h3>
+                    <p>חשבו על רעיון למדבקה שתרצו להכין:</p>
+                    <ul>
+                        <li>- האם תרצו לשלב דמות או פריט מסוים?</li>
+                        <li>- האם תרצו להוסיף גם טקסט למדבקה?</li>
+                        <li>- האם תרצו להעביר רגש מסוים?</li>
+                    </ul>
+                </div>
+
+                <div class="step-section">
+                    <h3>שלב ב' - כתיבת הנחיה ויצירה באמצעות ChatGPT</h3>
+                    <p>• עכשיו חשוב להגדיר ולכתוב את התכנון בצורת ההנחיה הבאה:</p>
+                    <div class="code-block">
+                        "צור לי מדבקה (סטיקר) לוואטסאפ עם _____ , הוסף גם כיתוב ______. יש להכין את הסטיקר עם רקע שקוף מראש"
+                    </div>
+
+                    <p><strong>דוגמא להנחיה:</strong></p>
+                    <div class="info-section">
+                        "צור לי מדבקה (סטיקר) לוואטסאפ עם מומין מחבק את סנורקה,<br>
+                        הוסף גם כיתוב "מזל טוב נשמה". יש להכין את הסטיקר עם רקע שקוף מראש"
+                    </div>
+
+                    <p>אז נמשיך -<br>
+                    • לחצו על המדבקה שנוצרה ובחרו באפשרות שמירה או SAVE.</p>
+                </div>
+
+                <div class="step-section">
+                    <h3>שלב ג' - הוספת המדבקה לוואטסאפ</h3>
+                    <p>עכשיו היכנסו לאפליקציית וואטסאפ:</p>
+                    <ol>
+                        <li>בחרו בשיחה מסוימת</li>
+                        <li>לחצו על סמל המדבקה</li>
+                        <li>בתוך ספריית המדבקות שנפתחה, בחרו באופציה "יצירה"</li>
+                        <li>עכשיו יפתח חלון חדש - בחרו את התמונה שיצרתם</li>
+                        <li>לחצו על כפתור "שלח"</li>
+                    </ol>
+                </div>
+
+                <div class="success-section">
+                    <h3>🎉 סיימתם!</h3>
+                    <p>עכשיו המדבקה נוספה לספריית המדבקות,<br>
+                    ותוכלו תמיד להשתמש בה.</p>
+                    <p>תהנו 🙂</p>
+                </div>
+            `);
+        }
+
+        function showGuide12() {
+            showModal('🚨 הכירו את האפליקציה מגן ישראל', `
+                <p>🚨 הכירו את האפליקציה מגן יִשְׂרָאֵל –<br>
+                האפליקציה שתשמור עליכם בשעת חירום ותעדכן אתכם בזמן אמת!</p>
+
+                <p>במציאות שבה הכול קורה מהר – אתם צריכים אפליקציה שמגיבה מהר יותר 🧠⚡<br>
+                שומר ישראל מרכזת עבורכם את כל מה שחשוב לדעת, לראות, ולפעול – ברגעים שלא משאירים זמן לחשוב.</p>
+
+                <div class="success-section">
+                    <h3>✨ מה תמצאו באפליקציה?</h3>
+                    
+                    <h4>✅ מפת מקלטים חכמה</h4>
+                    <p>רואה היכן אתם – ומפנה אתכם למרחב המוגן הקרוב ביותר</p>
+
+                    <h4>✅ שידור חי של חדשות 12</h4>
+                    <p>לא צריך לדפדף בין אתרים – העדכונים הכי חשובים אצלכם במסך</p>
+
+                    <h4>✅ סוכן AI לבדיקת ממ"ד</h4>
+                    <p>צלמו את המרחב המוגן שלכם – והעוזר החכם יגיד לכם אם הוא תקין ❗<br>
+                    (ניתוח תמונה אוטומטי, בקרוב גם וידאו 🎥)</p>
+
+                    <h4>✅ מעקב טיסות בזמן אמת</h4>
+                    <p>המראות, נחיתות, עיכובים – ישירות מהנתב"ג</p>
+
+                    <h4>✅ קופונים והנחות</h4>
+                    <p>במיוחד לתקופות קשות – כל החיסכון במקום אחד</p>
+
+                    <h4>✅ מצלמות LIVE</h4>
+                    <p>ראו מה קורה בשטח: כבישים, חופים, צפון ודרום</p>
+
+                    <h4>✅ עדכוני חירום מיידיים</h4>
+                    <p>התראות צבע אדום, הנחיות מהשטח, חדשות חמות – באפליקציה ולא בטלפון של השכנה</p>
+
+                    <h4>✅ קהילות חירום</h4>
+                    <p>הצטרפו לקבוצות וואטסאפ וטלגרם לפי אזור מגורים</p>
+                </div>
+
+                <div class="info-section">
+                    <h3>🛡️ אפליקציית מגן יִשְׂרָאֵל –</h3>
+                    <p>נבנתה כדי להגן, לייעץ ולעזור – בדיוק כשצריך.</p>
+                    
+                    <div style="text-align: center; margin: 20px 0;">
+                        <a href="https://app---dd2629cc.base44.app/Home" target="_blank" style="background: #dc3545; color: white; padding: 15px 30px; text-decoration: none; border-radius: 25px; font-weight: bold; display: inline-block;">
+                            🔗 כניסה לאפליקציית מגן ישראל
+                        </a>
+                    </div>
+                </div>
+            `);
+        }
+
+        function showGuide13() {
+            showModal('🤖 איזה כלי AI הכי שווה?', `
+                <h2>🤖 איזה AI הכי שווה? השאלה שכולם שואלים</h2>
+
+                <p>במקום לשלם על ChatGPT, Claude, Gemini וכל כלי בנפרד...<br>
+                יש פתרון חכם יותר 💡</p>
+
+                <div class="success-section">
+                    <h3>מודל RouteLLM מבית Abacus.AI</h3>
+                    <ul>
+                        <li>• מערכת אחת עם גישה לכל המודלים המובילים 💥</li>
+                        <li>• רק 10$ לחודש - במקום עשרות דולרים על כל כלי 💥</li>
+                        <li>• הכלי בוחר אוטומטית את המודל המתאים לכל משימה</li>
+                    </ul>
+                </div>
+
+                <div class="info-section">
+                    <h3>מה כלול?</h3>
+                    <ul>
+                        <li>✅ כל מודלי השפה הטובים (GPT, Claude, Gemini...)</li>
+                        <li>✅ יצירת תמונות (כולל Midjourney)</li>
+                        <li>✅ יצירת וידאו</li>
+                        <li>✅ עוד המון כלים במקום אחד</li>
+                    </ul>
+                </div>
+
+                <div class="step-section">
+                    <h3>מושלם עבור:</h3>
+                    <ul>
+                        <li>- מי שרוצה לבדוק מה עובד בשבילו</li>
+                        <li>- לחסוך כסף וזמן</li>
+                        <li>- לא להתעסק עם הרבה מנויים</li>
+                    </ul>
+                </div>
+
+                <div class="warning-section">
+                    <h3>הערות חשובות:</h3>
+                    <ul>
+                        <li>✴️ יש מגבלה מסוימת של שימוש, אבל שמעתי ממישהו שמשתמש בזה הרבה שזה לא נגמר מהר!</li>
+                        <li>✴️ בכל מקרה אם נגמר לך הקרדיט לסוכן אחד, המודל מעביר אותך לסוכן אחר!</li>
+                        <li>✴️ כמובן שאם תיצרו הרבה סרטונים זה ייגמר מהר</li>
+                    </ul>
+                </div>
+
+                <div style="text-align: center; margin: 20px 0;">
+                    <a href="https://chatllm.abacus.ai/ZFFFkbBySM" target="_blank" style="background: #667eea; color: white; padding: 15px 30px; text-decoration: none; border-radius: 25px; font-weight: bold; display: inline-block;">
+                        🔗 כניסה למודל
+                    </a>
+                </div>
+
+                <div class="success-section">
+                    <p>מומלץ במיוחד למי שרוצה להתנסות במחיר אטרקטיבי במיוחד - 10$ בחודש - במספר רב של כלי AI, מחוללי תמונות, וידאו ועוד, עם מגבלות מועטות יחסית.</p>
+                    
+                    <div style="text-align: center; margin: 20px 0;">
+                        <a href="https://amirbiron.github.io/Abacus-AI/" target="_blank" style="background: #28a745; color: white; padding: 10px 20px; text-decoration: none; border-radius: 15px; font-weight: bold; display: inline-block;">
+                            📖 סקירה מלאה של הכלי
+                        </a>
+                    </div>
+                </div>
+            `);
+        }
+
+        function showGuide14() {
+            showModal('🎨 אוסף של 6000 אייקוני תלת-מימד', `
+                <p>למעצבים: מצאתי אוסף של כמעט 6000 אייקוני תלת-מימד בחינם.</p>
+
+                <div class="info-section">
+                    <h3>מה כלול באוסף?</h3>
+                    <p>בתוך האוסף תמצאו תמונות מוכנות לכל סוגי הפרויקטים. אם אף אחת מהן לא מתאימה, יש גם מחולל מובנה ליצירת אייקונים מותאמים אישית.</p>
+                </div>
+
+                <div style="text-align: center; margin: 30px 0;">
+                    <a href="https://www.thiings.co/things" target="_blank" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px 40px; text-decoration: none; border-radius: 25px; font-weight: bold; display: inline-block; font-size: 1.1rem;">
+                        🎨 לקבלת האוסף - לחצו כאן
+                    </a>
+                </div>
+
+                <div class="success-section">
+                    <h3>💡 מתאים עבור:</h3>
+                    <ul>
+                        <li>מעצבי UI/UX</li>
+                        <li>פיתוח אפליקציות ואתרים</li>
+                        <li>מצגות ומסמכים</li>
+                        <li>פרויקטים גרפיים</li>
+                        <li>רשתות חברתיות</li>
+                    </ul>
+                </div>
+            `);
+        }
+
+        // סגירת מודאל בלחיצה על רקע או ESC
+        document.addEventListener('click', function(e) {
+            if (e.target.id === 'guideModal') {
+                closeModal();
+            }
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
